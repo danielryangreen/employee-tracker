@@ -18,6 +18,7 @@ const start = () => {
       choices: [
         'View All Employees',
         'View All Roles',
+        'Add Role',
         'View All Departments',
         'Add Department',
         'Exit',
@@ -36,6 +37,9 @@ const start = () => {
           break;
         case 'Add Department':
           addDepartment();
+          break;
+        case 'Add Role':
+          addRole();
           break;
         case 'Exit':
           connection.end();
@@ -58,30 +62,6 @@ const queryDepartments = () => {
   });
 };
 
-const addDepartment = () => {
-  inquirer
-    .prompt([
-      {
-        name: 'department',
-        type: 'input',
-        message: 'What department would you like to add?',
-      },
-    ])
-    .then((answer) => {
-      connection.query(
-        'INSERT INTO department SET ?',
-        {
-          name: answer.department,
-        },
-        (err) => {
-          if (err) throw err;
-          console.log('Your department was created successfully!');
-          start();
-        }
-      );
-    });
-};
-
 const queryRoles = () => {
   connection.query('SELECT * FROM role', (err, res) => {
     if (err) throw err;
@@ -101,6 +81,82 @@ const queryEmployees = () => {
     });
     console.log('----------------------------------------');
     start();
+  });
+};
+
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        name: 'name',
+        type: 'input',
+        message: 'What department would you like to add?',
+      },
+    ])
+    .then((answer) => {
+      connection.query(
+        'INSERT INTO department SET ?',
+        {
+          name: answer.name,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('Your department was created successfully!');
+          start();
+        }
+      );
+    });
+};
+
+const addRole = () => {
+  connection.query('SELECT * FROM department', (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: 'title',
+          type: 'input',
+          message: 'What role would you like to add?',
+        },
+        {
+          name: 'salary',
+          type: 'input',
+          message: 'How much is the salary for the role?',
+        },
+        {
+          name: 'department_id',
+          type: 'list',
+          choices() {
+            const choiceArray = [];
+            results.forEach(({ name }) => {
+              choiceArray.push(name);
+            });
+            return choiceArray;
+          },
+          message: 'What department does the role belong to?',
+        },
+      ])
+      .then((answer) => {
+        let chosenItem;
+        results.forEach((item) => {
+          if (item.name === answer.department_id) {
+            chosenItem = item;
+          }
+        });
+        connection.query(
+          'INSERT INTO role SET ?',
+          {
+            title: answer.title,
+            salary: answer.salary,
+            department_id: chosenItem.id,
+          },
+          (err) => {
+            if (err) throw err;
+            console.log('Your role was created successfully!');
+            start();
+          }
+        );
+      });
   });
 };
 
