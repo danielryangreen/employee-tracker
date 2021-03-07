@@ -23,16 +23,19 @@
   ![database schema](Assets/schema.png)
   ![animation of employee tracker](Assets/employee-tracker.gif)
   ## Features
-  - [ ] View All Employees
+  - [x] View All Employees
   - [ ] View All Employees by Department
   - [ ] View All Employees by Manager
   - [ ] Add Employee
   - [ ] Remove Employee
   - [ ] Update Employee Role
   - [ ] Update Employee Manager
-  - [ ] View All Roles
+  - [x] View All Roles
   - [ ] Add Role
   - [ ] Remove Role
+  - [x] View All Departments
+  - [ ] Add Department
+  - [ ] Remove Department
   ## Credits
   The following resources were used in this project:
 

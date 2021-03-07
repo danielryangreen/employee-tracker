@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/danielryangreen/employee-tracker#readme",
   "dependencies": {
+    "inquirer": "^8.0.0",
     "mysql": "^2.18.1"
   }
 }
