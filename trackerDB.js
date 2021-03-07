@@ -19,6 +19,7 @@ const start = () => {
         'View All Employees',
         'View All Roles',
         'View All Departments',
+        'Add Department',
         'Exit',
       ],
     })
@@ -32,6 +33,9 @@ const start = () => {
           break;
         case 'View All Departments':
           queryDepartments();
+          break;
+        case 'Add Department':
+          addDepartment();
           break;
         case 'Exit':
           connection.end();
@@ -52,6 +56,30 @@ const queryDepartments = () => {
     console.log('----------------------------------------');
     start();
   });
+};
+
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        name: 'department',
+        type: 'input',
+        message: 'What department would you like to add?',
+      },
+    ])
+    .then((answer) => {
+      connection.query(
+        'INSERT INTO department SET ?',
+        {
+          name: answer.department,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('Your department was created successfully!');
+          start();
+        }
+      );
+    });
 };
 
 const queryRoles = () => {
