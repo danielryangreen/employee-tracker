@@ -17,6 +17,7 @@ const start = () => {
       message: 'What would you like to do?',
       choices: [
         'View All Employees',
+        'Add Employee',
         'View All Roles',
         'Add Role',
         'View All Departments',
@@ -40,6 +41,9 @@ const start = () => {
           break;
         case 'Add Role':
           addRole();
+          break;
+        case 'Add Employee':
+          addEmployee();
           break;
         case 'Exit':
           connection.end();
@@ -153,6 +157,58 @@ const addRole = () => {
           (err) => {
             if (err) throw err;
             console.log('Your role was created successfully!');
+            start();
+          }
+        );
+      });
+  });
+};
+
+const addEmployee = () => {
+  connection.query('SELECT * FROM role', (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: 'first_name',
+          type: 'input',
+          message: "What is the employee's first name?",
+        },
+        {
+          name: 'last_name',
+          type: 'input',
+          message: "What is the employee's last name?",
+        },
+        {
+          name: 'role_id',
+          type: 'list',
+          choices() {
+            const choiceArray = [];
+            results.forEach(({ title }) => {
+              choiceArray.push(title);
+            });
+            return choiceArray;
+          },
+          message: "What is the employee's role?",
+        },
+      ])
+      .then((answer) => {
+        let chosenItem;
+        results.forEach((item) => {
+          if (item.title === answer.role_id) {
+            chosenItem = item;
+          }
+        });
+        connection.query(
+          'INSERT INTO employee SET ?',
+          {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: chosenItem.id,
+          },
+          (err) => {
+            if (err) throw err;
+            console.log('Your employee was created successfully!');
             start();
           }
         );
