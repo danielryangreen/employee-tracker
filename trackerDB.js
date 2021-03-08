@@ -20,6 +20,7 @@ const start = () => {
         'Add Employee',
         'View All Roles',
         'Add Role',
+        'Update Role',
         'View All Departments',
         'Add Department',
         'Exit',
@@ -44,6 +45,9 @@ const start = () => {
           break;
         case 'Add Employee':
           addEmployee();
+          break;
+        case 'Update Role':
+          updateRole();
           break;
         case 'Exit':
           connection.end();
@@ -209,9 +213,80 @@ const addEmployee = () => {
           (err) => {
             if (err) throw err;
             console.log('Your employee was created successfully!');
-            start();
+            updateManager();
           }
         );
+      });
+  });
+};
+
+const updateRole = () => {
+  connection.query('SELECT * FROM employee', (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: 'employeeName',
+          type: 'list',
+          choices() {
+            const choiceArray = [];
+            results.forEach(({ first_name, last_name }) => {
+              choiceArray.push(`${first_name} ${last_name}`);
+            });
+            return choiceArray;
+          },
+          message: "Which employee would you like to update?",
+        },
+      ])
+      .then((answer) => {
+        let chosenEmployee;
+        results.forEach((item) => {
+          if (`${item.first_name} ${item.last_name}` === answer.employeeName) {
+            chosenEmployee = item;
+          }
+        });
+        connection.query('SELECT * FROM role', (err, results) => {
+          if (err) throw err;
+          inquirer
+            .prompt([
+              {
+                name: 'roleTitle',
+                type: 'list',
+                choices() {
+                  const choiceArray = [];
+                  results.forEach(({ title }) => {
+                    choiceArray.push(title);
+                  });
+                  return choiceArray;
+                },
+                message: "What is the employee's new role?",
+              },
+            ])
+            .then((answer) => {
+              let chosenRole;
+              results.forEach((item) => {
+                if (item.title === answer.roleTitle) {
+                  chosenRole = item;
+                }
+              });
+              connection.query(
+                'UPDATE employee SET ? WHERE ?',
+                [
+                  {
+                    role_id: chosenRole.id,
+                  },
+                  {
+                    id: chosenEmployee.id,
+                  },
+                ],
+                (err) => {
+                  if (err) throw err;
+                  console.log("The employee's role was updated successfully!");
+                  start();
+                }
+              );
+            });
+        });
       });
   });
 };

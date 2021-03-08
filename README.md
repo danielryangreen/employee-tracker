@@ -26,15 +26,15 @@
   - [x] View All Employees
   - [ ] View All Employees by Department
   - [ ] View All Employees by Manager
-  - [ ] Add Employee
+  - [x] Add Employee
   - [ ] Remove Employee
-  - [ ] Update Employee Role
+  - [x] Update Employee Role
   - [ ] Update Employee Manager
   - [x] View All Roles
-  - [ ] Add Role
+  - [x] Add Role
   - [ ] Remove Role
   - [x] View All Departments
-  - [ ] Add Department
+  - [x] Add Department
   - [ ] Remove Department
   ## Credits
   The following resources were used in this project:
