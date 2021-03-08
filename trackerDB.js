@@ -184,7 +184,7 @@ const addEmployee = () => {
           message: "What is the employee's last name?",
         },
         {
-          name: 'role_id',
+          name: 'roleTitle',
           type: 'list',
           choices() {
             const choiceArray = [];
@@ -197,25 +197,58 @@ const addEmployee = () => {
         },
       ])
       .then((answer) => {
-        let chosenItem;
+        const firstName = answer.first_name;
+        const lastName = answer.last_name;
+        let chosenRole;
         results.forEach((item) => {
-          if (item.title === answer.role_id) {
-            chosenItem = item;
+          if (item.title === answer.roleTitle) {
+            chosenRole = item;
           }
         });
-        connection.query(
-          'INSERT INTO employee SET ?',
-          {
-            first_name: answer.first_name,
-            last_name: answer.last_name,
-            role_id: chosenItem.id,
-          },
-          (err) => {
-            if (err) throw err;
-            console.log('Your employee was created successfully!');
-            updateManager();
-          }
-        );
+        connection.query('SELECT * FROM employee', (err, results) => {
+          if (err) throw err;
+          inquirer
+            .prompt([
+              {
+                name: 'managerName',
+                type: 'list',
+                choices() {
+                  const choiceArray = ["None"];
+                  results.forEach(({ first_name, last_name }) => {
+                    choiceArray.push(`${first_name} ${last_name}`);
+                  });
+                  return choiceArray;
+                },
+                message: "Who is the employee's manager?",
+              },
+            ])
+            .then((answer) => {
+              let chosenManager;
+              if ("None" === answer.managerName) {
+                chosenManager = {};
+              } else {
+                results.forEach((item) => {
+                  if (`${item.first_name} ${item.last_name}` === answer.managerName) {
+                    chosenManager = item;
+                  }
+                });
+              }
+              connection.query(
+                'INSERT INTO employee SET ?',
+                {
+                  first_name: firstName,
+                  last_name: lastName,
+                  role_id: chosenRole.id,
+                  manager_id: chosenManager.id,
+                },
+                (err) => {
+                  if (err) throw err;
+                  console.log('Your employee was created successfully!');
+                  start();
+                }
+              );
+            });
+        });
       });
   });
 };
