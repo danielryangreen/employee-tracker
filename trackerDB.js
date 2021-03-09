@@ -71,10 +71,14 @@ const queryDepartments = () => {
 };
 
 const queryRoles = () => {
-  connection.query('SELECT * FROM role', (err, res) => {
+  let query =
+    'SELECT role.id, role.title, role.salary, department.name ';
+  query +=
+    'FROM role INNER JOIN department ON role.department_id = department.id';
+  connection.query(query, (err, res) => {
     if (err) throw err;
-    res.forEach(({ id, title, salary }) => {
-      console.log(`${id} | ${title} | ${salary}`);
+    res.forEach(({ id, title, salary, name }) => {
+      console.log(`${id} | ${title} | ${salary} | ${name}`);
     });
     console.log('----------------------------------------');
     start();
@@ -82,10 +86,24 @@ const queryRoles = () => {
 };
 
 const queryEmployees = () => {
-  connection.query('SELECT * FROM employee', (err, res) => {
+  let query =
+    'SELECT e.id, e.first_name AS eFirstName, e.last_name AS eLastName, role.title, role.salary, department.name, m.first_name AS mFirstName, m.last_name AS mLastName ';
+  query +=
+    'FROM employee e INNER JOIN role ON e.role_id = role.id ';
+  query +=
+    'INNER JOIN department ON role.department_id = department.id ';
+  query +=
+    'LEFT JOIN employee m ON e.manager_id = m.id';
+  connection.query(query, (err, res) => {
     if (err) throw err;
-    res.forEach(({ id, first_name, last_name }) => {
-      console.log(`${id} | ${first_name} | ${last_name}`);
+    res.forEach(({ id, eFirstName, eLastName, title, salary, name, mFirstName, mLastName }) => {
+      let mFullName;
+      if (mFirstName === null || mLastName === null) {
+        mFullName = "";
+      } else {
+        mFullName = `${mFirstName} ${mLastName}`;
+      }
+      console.log(`${id} | ${eFirstName} ${eLastName} | ${title} | ${salary} | ${name} | ${mFullName}`);
     });
     console.log('----------------------------------------');
     start();
