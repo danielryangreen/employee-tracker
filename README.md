@@ -14,15 +14,19 @@
   * [Tests](#tests)
   * [Questions](#questions)
   ## Installation
-  To install required packages, enter `npm i` in the terminal.
+  Copy and paste the code from __trackerSeeds.sql__ into MySQL and then execute to create and populate the database. To install required packages, enter `npm i` in the terminal.
   ## Usage
-  To run the application, enter `node server.js` in the terminal.
+  To run the application, enter `npm start` in the terminal.
 
-  Here is a mock-up that demonstrates the application's appearance and functionality.
+  Here is a walkthrough video that demonstrates the functionality of the application.
 
-  ![database schema](Assets/schema.png)
-  ![animation of employee tracker](Assets/employee-tracker.gif)
+  [Google Drive](https://drive.google.com/file/d/1JYnEdhZ_4Uij9Ta3MODossJgsqY3LbSB/view?usp=sharing)
+
+  Here is the schema diagram.
+
+  ![schema](Assets/schema.png)
   ## Features
+  The checked items represent the MVP functionality. The remaining features have not been implemented yet.
   - [x] View All Employees
   - [ ] View All Employees by Department
   - [ ] View All Employees by Manager
@@ -40,13 +44,13 @@
   ## Credits
   The following resources were used in this project:
 
-  <!-- - [Bootstrap](https://getbootstrap.com/)
-  - [Font Awesome](https://fontawesome.com/)
+  - [MySQL](https://dev.mysql.com/downloads/mysql/)
   - [Node.js](https://nodejs.org/en/)
-  - [Express](https://expressjs.com/)
-  - [npm uuid](https://www.npmjs.com/package/uuid) -->
+  - [npm mysql](https://www.npmjs.com/package/mysql)
+  - [npm inquirer](https://www.npmjs.com/package/inquirer/v/0.2.3)
+  - [npm console.table](https://www.npmjs.com/package/console.table)
 
-  Schema and mock-up animation were provided by [Trilogy Education Services](https://trilogyed.com/).
+  The schema diagram was provided by [Trilogy Education Services](https://trilogyed.com/).
   ## License
   This project is covered under the MIT license.
   ## Contributing
