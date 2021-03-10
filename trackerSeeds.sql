@@ -33,5 +33,6 @@ CREATE TABLE employee (
   PRIMARY KEY (id)
 );
 
+-- using null for employee 5 so id's match the mock-up --
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("John", "Doe", 1, 3), ("Mike", "Chan", 2, 1), ("Ashley", "Rodriguez", 3, null), ("Kevin", "Tupik", 4, 3), (null, null, null, null), ("Malia", "Brown", 5, null), ("Sarah", "Lourd", 6, null), ("Tom", "Allen", 7, 7), ("Christian", "Eckenrode", 3, 2);

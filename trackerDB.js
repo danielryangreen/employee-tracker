@@ -19,24 +19,24 @@ const start = () => {
       choices: [
         'View All Employees',
         'Add Employee',
+        'Update Employee Role',
         'View All Roles',
         'Add Role',
-        'Update Role',
         'View All Departments',
         'Add Department',
-        'Exit',
+        'EXIT',
       ],
     })
     .then((answer) => {
       switch (answer.action) {
-        case 'View All Employees':
-          queryEmployees();
+        case 'View All Departments':
+          viewDepartments();
           break;
         case 'View All Roles':
-          queryRoles();
+          viewRoles();
           break;
-        case 'View All Departments':
-          queryDepartments();
+        case 'View All Employees':
+          viewEmployees();
           break;
         case 'Add Department':
           addDepartment();
@@ -47,10 +47,10 @@ const start = () => {
         case 'Add Employee':
           addEmployee();
           break;
-        case 'Update Role':
+        case 'Update Employee Role':
           updateRole();
           break;
-        case 'Exit':
+        case 'EXIT':
           connection.end();
           break;
         default:
@@ -60,7 +60,7 @@ const start = () => {
     });
 };
 
-const queryDepartments = () => {
+const viewDepartments = () => {
   connection.query('SELECT * FROM department', (err, res) => {
     if (err) throw err;
     const values = [['id', 'department']];
@@ -72,7 +72,7 @@ const queryDepartments = () => {
   });
 };
 
-const queryRoles = () => {
+const viewRoles = () => {
   let query =
     'SELECT role.id, role.title, role.salary, department.name ';
   query +=
@@ -88,7 +88,8 @@ const queryRoles = () => {
   });
 };
 
-const queryEmployees = () => {
+// using aliases for self join to get manager
+const viewEmployees = () => {
   let query =
     'SELECT e.id, e.first_name AS eFirstName, e.last_name AS eLastName, role.title, role.salary, department.name, m.first_name AS mFirstName, m.last_name AS mLastName ';
   query +=
@@ -101,6 +102,7 @@ const queryEmployees = () => {
     if (err) throw err;
     const values = [['id', 'first_name', 'last_name', 'title', 'salary', 'department', 'manager']];
     res.forEach(({ id, eFirstName, eLastName, title, salary, name, mFirstName, mLastName }) => {
+      // if no manager, display empty string instead of null null
       let mFullName;
       if (mFirstName === null || mLastName === null) {
         mFullName = "";
@@ -219,8 +221,10 @@ const addEmployee = () => {
         },
       ])
       .then((answer) => {
+        // save names to be used later
         const firstName = answer.first_name;
         const lastName = answer.last_name;
+
         let chosenRole;
         results.forEach((item) => {
           if (item.title === answer.roleTitle) {
