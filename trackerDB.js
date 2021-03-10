@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -62,10 +63,11 @@ const start = () => {
 const queryDepartments = () => {
   connection.query('SELECT * FROM department', (err, res) => {
     if (err) throw err;
+    const values = [['id', 'department']];
     res.forEach(({ id, name }) => {
-      console.log(`${id} | ${name}`);
+      values.push([`${id}`, `${name}`]);
     });
-    console.log('----------------------------------------');
+    console.table(values[0], values.slice(1));
     start();
   });
 };
@@ -77,10 +79,11 @@ const queryRoles = () => {
     'FROM role INNER JOIN department ON role.department_id = department.id';
   connection.query(query, (err, res) => {
     if (err) throw err;
+    const values = [['id', 'title', 'salary', 'department']];
     res.forEach(({ id, title, salary, name }) => {
-      console.log(`${id} | ${title} | ${salary} | ${name}`);
+      values.push([`${id}`, `${title}`, `${salary}`, `${name}`]);
     });
-    console.log('----------------------------------------');
+    console.table(values[0], values.slice(1));
     start();
   });
 };
@@ -96,6 +99,7 @@ const queryEmployees = () => {
     'LEFT JOIN employee m ON e.manager_id = m.id';
   connection.query(query, (err, res) => {
     if (err) throw err;
+    const values = [['id', 'first_name', 'last_name', 'title', 'salary', 'department', 'manager']];
     res.forEach(({ id, eFirstName, eLastName, title, salary, name, mFirstName, mLastName }) => {
       let mFullName;
       if (mFirstName === null || mLastName === null) {
@@ -103,9 +107,9 @@ const queryEmployees = () => {
       } else {
         mFullName = `${mFirstName} ${mLastName}`;
       }
-      console.log(`${id} | ${eFirstName} ${eLastName} | ${title} | ${salary} | ${name} | ${mFullName}`);
+      values.push([`${id}`, `${eFirstName}`, `${eLastName}`, `${title}`, `${salary}`, `${name}`, `${mFullName}`]);
     });
-    console.log('----------------------------------------');
+    console.table(values[0], values.slice(1));
     start();
   });
 };

@@ -36,6 +36,7 @@
   - [x] View All Departments
   - [x] Add Department
   - [ ] Remove Department
+  - [ ] View the Total Utilized Budget of a Department
   ## Credits
   The following resources were used in this project:
 
