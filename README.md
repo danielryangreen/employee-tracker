@@ -20,7 +20,7 @@
 
   Here is a walkthrough video that demonstrates the functionality of the application.
 
-  [Google Drive](https://drive.google.com/file/d/1JYnEdhZ_4Uij9Ta3MODossJgsqY3LbSB/view?usp=sharing)
+  [Google Drive](https://drive.google.com/file/d/1PYQ8HtZw2BUY6kcZMSZooEvROszix6J-/view?usp=sharing)
 
   Here is the schema diagram.
 
